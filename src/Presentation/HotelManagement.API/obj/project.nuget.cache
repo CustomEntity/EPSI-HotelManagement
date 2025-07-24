@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "dgSpecHash": "2/TXja8xr0E=",
-  "success": true,
+  "dgSpecHash": "jJgKNLyO/GU=",
+  "success": false,
   "projectFilePath": "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Presentation/HotelManagement.API/HotelManagement.API.csproj",
   "expectedPackageFiles": [
     "/Users/morenoflavio/.nuget/packages/automapper/13.0.1/automapper.13.0.1.nupkg.sha512",
@@ -71,5 +71,15 @@
     "/Users/morenoflavio/.nuget/packages/system.text.json/8.0.0/system.text.json.8.0.0.nupkg.sha512",
     "/Users/morenoflavio/.nuget/packages/system.threading.channels/6.0.0/system.threading.channels.6.0.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1605",
+      "level": "Error",
+      "message": "Warning As Error: Detected package downgrade: MediatR from 13.0.0 to 12.2.0. Reference the package directly from the project to select a different version. \n HotelManagement.API -> HotelManagement.Application -> HotelManagement.Domain -> MediatR (>= 13.0.0) \n HotelManagement.API -> HotelManagement.Application -> MediatR (>= 12.2.0)",
+      "libraryId": "MediatR",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
 }
