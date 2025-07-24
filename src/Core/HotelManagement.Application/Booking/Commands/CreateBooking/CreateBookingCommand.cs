@@ -1,17 +1,21 @@
 using HotelManagement.Domain.Shared;
 using MediatR;
 
-namespace HotelManagement.Application.Booking.Commands.CreateBooking;
+namespace HotelManagement.Application.Booking.Commands.BookRoom;
 
-public sealed class CreateBookingCommand : IRequest<Result<Guid>>
+public sealed class BookRoomCommand : IRequest<Result<Guid>>
 {
     public Guid CustomerId { get; init; }
+    
+    public Guid RoomId { get; init; }
     
     public DateTime StartDate { get; init; }
     
     public DateTime EndDate { get; init; }
     
-    public List<BookingRoomRequest> Rooms { get; init; } = new();
+    public int Adults { get; init; }
+    
+    public int Children { get; init; } = 0;
     
     public decimal? DiscountPercentage { get; init; }
     
@@ -20,15 +24,6 @@ public sealed class CreateBookingCommand : IRequest<Result<Guid>>
     public bool RequirePayment { get; init; } = true;
     
     public CreditCardInfo? PaymentInfo { get; init; }
-}
-
-public sealed class BookingRoomRequest
-{
-    public Guid RoomId { get; init; }
-    
-    public int Adults { get; init; }
-    
-    public int Children { get; init; } = 0;
 }
 
 public sealed class CreditCardInfo
