@@ -1,0 +1,395 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Presentation/HotelManagement.API/HotelManagement.API.csproj": {}
+  },
+  "projects": {
+    "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Core/HotelManagement.Application/HotelManagement.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Core/HotelManagement.Application/HotelManagement.Application.csproj",
+        "projectName": "HotelManagement.Application",
+        "projectPath": "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Core/HotelManagement.Application/HotelManagement.Application.csproj",
+        "packagesPath": "/Users/morenoflavio/.nuget/packages/",
+        "outputPath": "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Core/HotelManagement.Application/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/morenoflavio/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Core/HotelManagement.Domain/HotelManagement.Domain.csproj": {
+                "projectPath": "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Core/HotelManagement.Domain/HotelManagement.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
+            "FluentValidation": {
+              "target": "Package",
+              "version": "[11.9.0, )"
+            },
+            "FluentValidation.DependencyInjectionExtensions": {
+              "target": "Package",
+              "version": "[11.9.0, )"
+            },
+            "MediatR": {
+              "target": "Package",
+              "version": "[12.2.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.102/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Core/HotelManagement.Domain/HotelManagement.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Core/HotelManagement.Domain/HotelManagement.Domain.csproj",
+        "projectName": "HotelManagement.Domain",
+        "projectPath": "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Core/HotelManagement.Domain/HotelManagement.Domain.csproj",
+        "packagesPath": "/Users/morenoflavio/.nuget/packages/",
+        "outputPath": "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Core/HotelManagement.Domain/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/morenoflavio/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "MediatR": {
+              "target": "Package",
+              "version": "[12.2.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.102/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Infrastructure/HotelManagement.Identity/HotelManagement.Identity.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Infrastructure/HotelManagement.Identity/HotelManagement.Identity.csproj",
+        "projectName": "HotelManagement.Identity",
+        "projectPath": "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Infrastructure/HotelManagement.Identity/HotelManagement.Identity.csproj",
+        "packagesPath": "/Users/morenoflavio/.nuget/packages/",
+        "outputPath": "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Infrastructure/HotelManagement.Identity/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/morenoflavio/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Core/HotelManagement.Application/HotelManagement.Application.csproj": {
+                "projectPath": "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Core/HotelManagement.Application/HotelManagement.Application.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.102/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Infrastructure/HotelManagement.Infrastructure/HotelManagement.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Infrastructure/HotelManagement.Infrastructure/HotelManagement.Infrastructure.csproj",
+        "projectName": "HotelManagement.Infrastructure",
+        "projectPath": "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Infrastructure/HotelManagement.Infrastructure/HotelManagement.Infrastructure.csproj",
+        "packagesPath": "/Users/morenoflavio/.nuget/packages/",
+        "outputPath": "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Infrastructure/HotelManagement.Infrastructure/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/morenoflavio/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Core/HotelManagement.Application/HotelManagement.Application.csproj": {
+                "projectPath": "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Core/HotelManagement.Application/HotelManagement.Application.csproj"
+              },
+              "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Core/HotelManagement.Domain/HotelManagement.Domain.csproj": {
+                "projectPath": "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Core/HotelManagement.Domain/HotelManagement.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.InMemory": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.102/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Presentation/HotelManagement.API/HotelManagement.API.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Presentation/HotelManagement.API/HotelManagement.API.csproj",
+        "projectName": "HotelManagement.API",
+        "projectPath": "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Presentation/HotelManagement.API/HotelManagement.API.csproj",
+        "packagesPath": "/Users/morenoflavio/.nuget/packages/",
+        "outputPath": "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Presentation/HotelManagement.API/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/morenoflavio/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Core/HotelManagement.Application/HotelManagement.Application.csproj": {
+                "projectPath": "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Core/HotelManagement.Application/HotelManagement.Application.csproj"
+              },
+              "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Infrastructure/HotelManagement.Identity/HotelManagement.Identity.csproj": {
+                "projectPath": "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Infrastructure/HotelManagement.Identity/HotelManagement.Identity.csproj"
+              },
+              "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Infrastructure/HotelManagement.Infrastructure/HotelManagement.Infrastructure.csproj": {
+                "projectPath": "/Users/morenoflavio/Documents/Epsi/HotelManagementSystem/src/Infrastructure/HotelManagement.Infrastructure/HotelManagement.Infrastructure.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.OpenApi": {
+              "target": "Package",
+              "version": "[8.0.12, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.5.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.102/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
