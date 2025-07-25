@@ -237,4 +237,124 @@ public class Booking : AggregateRoot<BookingId>
 
     public List<RoomId> GetRoomIds() =>
         _items.Select(i => i.RoomId).ToList();
+
+    public BookingStatus CalculateCurrentStatus()
+    {
+        if (!_items.Any()) return Status;
+        
+        var confirmedItems = _items.Where(i => i.Status == BookingItemStatus.Confirmed).ToList();
+        var checkedInItems = _items.Where(i => i.Status == BookingItemStatus.CheckedIn).ToList();
+        var checkedOutItems = _items.Where(i => i.Status == BookingItemStatus.CheckedOut).ToList();
+        
+        // Tous check-out = CheckedOut
+        if (checkedOutItems.Count == _items.Count)
+            return BookingStatus.CheckedOut;
+            
+        // Tous check-in = CheckedIn
+        if (checkedInItems.Count == _items.Count)
+            return BookingStatus.CheckedIn;
+            
+        // Mélange avec au moins un check-in = PartiallyCheckedIn
+        if (checkedInItems.Any())
+            return BookingStatus.PartiallyCheckedIn;
+            
+        // Tous confirmés = Confirmed
+        if (confirmedItems.Count == _items.Count)
+            return BookingStatus.Confirmed;
+            
+        return Status;
+    }
+
+    public Result CheckInRoom(RoomId roomId)
+    {
+        var item = _items.FirstOrDefault(i => i.RoomId.Value == roomId.Value);
+        if (item == null)
+            return Result.Failure("Room not found in booking");
+            
+        var result = item.CheckIn();
+        if (result.IsFailure)
+            return result;
+            
+        // Mise à jour intelligente du statut global
+        var newStatus = CalculateCurrentStatus();
+        if (Status != newStatus)
+        {
+            Status = newStatus;
+            
+            // Si c'est le premier check-in, marquer l'heure globale
+            if ((newStatus == BookingStatus.PartiallyCheckedIn || newStatus == BookingStatus.CheckedIn) 
+                && CheckInTime == null)
+            {
+                CheckInTime = DateTime.UtcNow;
+            }
+        }
+        
+        ModifiedAt = DateTime.UtcNow;
+        AddDomainEvent(new RoomCheckedInEvent(Id, roomId, DateTime.UtcNow));
+        return Result.Success();
+    }
+
+    public Result CheckOutRoom(RoomId roomId)
+    {
+        var item = _items.FirstOrDefault(i => i.RoomId.Value == roomId.Value);
+        if (item == null)
+            return Result.Failure("Room not found in booking");
+            
+        var result = item.CheckOut();
+        if (result.IsFailure)
+            return result;
+            
+        // Mise à jour du statut global
+        var newStatus = CalculateCurrentStatus();
+        if (Status != newStatus)
+        {
+            Status = newStatus;
+            if (newStatus == BookingStatus.CheckedOut)
+            {
+                CheckOutTime = DateTime.UtcNow;
+            }
+        }
+        
+        ModifiedAt = DateTime.UtcNow;
+        AddDomainEvent(new RoomCheckedOutEvent(Id, roomId, DateTime.UtcNow));
+        return Result.Success();
+    }
+
+    public bool IsFullyCheckedIn() => 
+        _items.All(i => i.Status == BookingItemStatus.CheckedIn);
+        
+    public bool IsPartiallyCheckedIn() => 
+        _items.Any(i => i.Status == BookingItemStatus.CheckedIn) && !IsFullyCheckedIn();
+        
+    public List<RoomId> GetCheckedInRooms() =>
+        _items.Where(i => i.Status == BookingItemStatus.CheckedIn)
+              .Select(i => i.RoomId)
+              .ToList();
+              
+    public List<RoomId> GetPendingCheckInRooms() =>
+        _items.Where(i => i.Status == BookingItemStatus.Confirmed)
+              .Select(i => i.RoomId)
+              .ToList();
+
+    // Garder CheckOut() pour les checkout complets si nécessaire
+    public Result CheckOut()
+    {
+        if (!Status.CanCheckOut())
+            return Result.Failure($"Cannot check out with status: {Status}");
+
+        // Checkout de toutes les chambres
+        foreach (var item in _items.Where(i => i.Status == BookingItemStatus.CheckedIn))
+        {
+            item.CheckOut();
+        }
+
+        Status = BookingStatus.CheckedOut;
+        CheckOutTime = DateTime.UtcNow;
+        ModifiedAt = DateTime.UtcNow;
+
+        var roomIds = _items.Select(i => i.RoomId).ToList();
+        AddDomainEvent(new GuestCheckedOutEvent(Id, roomIds, CheckOutTime.Value));
+
+        return Result.Success();
+    }
 }

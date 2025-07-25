@@ -43,9 +43,9 @@ public sealed class CheckInCommandHandler : IRequestHandler<CheckInCommand, Resu
         if (!booking.GetRoomIds().Contains(roomId))
             return Result.Failure("This room is not part of the specified booking");
 
-        // Vérifier que la réservation est confirmée
-        if (booking.Status != BookingStatus.Confirmed)
-            return Result.Failure($"Booking must be confirmed before check-in. Current status: {booking.Status}");
+        // Vérifier que la réservation peut faire des check-ins
+        if (!booking.Status.CanCheckIn())
+            return Result.Failure($"Booking cannot check in with status: {booking.Status}");
 
         // Vérifier que c'est le bon jour pour le check-in
         var checkInDate = request.CheckInTime.Date;
@@ -55,18 +55,13 @@ public sealed class CheckInCommandHandler : IRequestHandler<CheckInCommand, Resu
         if (checkInDate > booking.DateRange.StartDate.Date.AddDays(1))
             return Result.Failure("Check-in date is too late. Contact front desk for late check-in");
 
-        // Vérifier que c'est la seule chambre de la réservation
-        var roomIds = booking.GetRoomIds();
-        if (roomIds.Count > 1)
-            return Result.Failure("This booking has multiple rooms. Please use the multi-room check-in process.");
-
         // Effectuer le check-in de la chambre
         var checkInResult = room.CheckIn();
         if (checkInResult.IsFailure)
             return checkInResult;
 
-        // Mettre à jour la réservation avec l'heure de check-in
-        var updateBookingResult = booking.CheckIn();
+        // Check-in granulaire au niveau réservation
+        var updateBookingResult = booking.CheckInRoom(roomId);
         if (updateBookingResult.IsFailure)
             return updateBookingResult;
 
