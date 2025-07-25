@@ -28,7 +28,6 @@ public sealed class ProcessPaymentCommandValidator : AbstractValidator<ProcessPa
             .Must(BeValidPaymentMethod)
             .WithMessage("PaymentMethod must be one of: CreditCard, DebitCard, Cash, BankTransfer, PayPal");
 
-        // Validation conditionnelle pour les cartes de crédit
         When(x => RequiresOnlineProcessing(x.PaymentMethod), () =>
         {
             RuleFor(x => x.CardNumber)
@@ -60,7 +59,6 @@ public sealed class ProcessPaymentCommandValidator : AbstractValidator<ProcessPa
                 .WithMessage("CVV must be 3 or 4 digits");
         });
 
-        // Validation de la date d'expiration
         When(x => x.ExpiryMonth.HasValue && x.ExpiryYear.HasValue, () =>
         {
             RuleFor(x => x)
@@ -86,18 +84,14 @@ public sealed class ProcessPaymentCommandValidator : AbstractValidator<ProcessPa
         if (string.IsNullOrWhiteSpace(cardNumber))
             return false;
 
-        // Supprime les espaces et tirets
         var cleanNumber = cardNumber.Replace(" ", "").Replace("-", "");
         
-        // Vérifie que c'est uniquement des chiffres
         if (!cleanNumber.All(char.IsDigit))
             return false;
 
-        // Vérifie la longueur (13-19 chiffres pour la plupart des cartes)
         if (cleanNumber.Length < 13 || cleanNumber.Length > 19)
             return false;
 
-        // Algorithme de Luhn pour validation
         return IsValidLuhn(cleanNumber);
     }
 

@@ -4,7 +4,6 @@ using HotelManagement.Domain.Common;
 using HotelManagement.Domain.Customer;
 using HotelManagement.Domain.Customer.ValueObjects;
 using HotelManagement.Domain.Payment;
-using HotelManagement.Domain.Payment.Aggregates;
 using HotelManagement.Domain.Payment.Services;
 using HotelManagement.Domain.Payment.ValueObjects;
 using HotelManagement.Domain.Shared;
@@ -36,30 +35,24 @@ public sealed class ProcessPaymentCommandHandler : IRequestHandler<ProcessPaymen
 
     public async Task<Result<Guid>> Handle(ProcessPaymentCommand request, CancellationToken cancellationToken)
     {
-        // Validation des IDs
         var bookingId = BookingId.Create(request.BookingId);
         var customerId = CustomerId.Create(request.CustomerId);
 
-        // Vérifier que la réservation existe
         var booking = await _bookingRepository.GetByIdAsync(bookingId, cancellationToken);
         if (booking == null)
             return Result<Guid>.Failure("Booking not found");
 
-        // Vérifier que le client existe
         var customer = await _customerRepository.GetByIdAsync(customerId, cancellationToken);
         if (customer == null)
             return Result<Guid>.Failure("Customer not found");
 
-        // Vérifier que le client correspond à la réservation
         if (booking.CustomerId.Value != customerId.Value)
             return Result<Guid>.Failure("Customer does not match the booking");
 
-        // Vérifier qu'il n'y a pas déjà un paiement réussi pour cette réservation
         var existingPayment = await _paymentRepository.GetByBookingIdAsync(bookingId, cancellationToken);
         if (existingPayment?.Status.IsSuccessful() == true)
             return Result<Guid>.Failure("Payment already exists for this booking");
 
-        // Créer les value objects
         var moneyResult = Money.Create(request.Amount, request.Currency);
         if (moneyResult.IsFailure)
             return Result<Guid>.Failure(moneyResult.Error);
@@ -77,7 +70,6 @@ public sealed class ProcessPaymentCommandHandler : IRequestHandler<ProcessPaymen
             creditCard = creditCardResult.Value;
         }
 
-        // Créer le paiement
         var paymentResult = Domain.Payment.Aggregates.Payment.Create(
             bookingId,
             customerId,
@@ -90,17 +82,14 @@ public sealed class ProcessPaymentCommandHandler : IRequestHandler<ProcessPaymen
 
         var payment = paymentResult.Value;
 
-        // Traiter le paiement
         var processResult = await payment.ProcessAsync(_paymentGateway);
         if (processResult.IsFailure)
         {
-            // Sauvegarder même en cas d'échec pour garder une trace
             await _paymentRepository.AddAsync(payment, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             return Result<Guid>.Failure(processResult.Error);
         }
 
-        // Sauvegarder le paiement réussi
         await _paymentRepository.AddAsync(payment, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

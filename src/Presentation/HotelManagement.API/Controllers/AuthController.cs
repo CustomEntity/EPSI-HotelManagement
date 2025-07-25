@@ -28,7 +28,6 @@ public class AuthController : ControllerBase
         if (result.IsFailure)
             return BadRequest(new { error = result.Error });
 
-        // Créer les claims pour le cookie
         var claims = new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, result.Value),
@@ -38,7 +37,6 @@ public class AuthController : ControllerBase
 
         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-        // Connecter l'utilisateur avec un cookie
         await HttpContext.SignInAsync(
             CookieAuthenticationDefaults.AuthenticationScheme,
             new ClaimsPrincipal(claimsIdentity));
@@ -63,7 +61,6 @@ public class AuthController : ControllerBase
         if (result.IsFailure)
             return Unauthorized(new { error = result.Error });
 
-        // Créer les claims pour le cookie
         var claims = new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, result.Value.UserId),
@@ -73,7 +70,6 @@ public class AuthController : ControllerBase
 
         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-        // Connecter l'utilisateur avec un cookie
         await HttpContext.SignInAsync(
             CookieAuthenticationDefaults.AuthenticationScheme,
             new ClaimsPrincipal(claimsIdentity));

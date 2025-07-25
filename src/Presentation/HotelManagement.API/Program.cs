@@ -26,7 +26,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Configure pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

@@ -35,7 +35,6 @@ public sealed class GetPaymentHistoryQueryHandler : IRequestHandler<GetPaymentHi
 
             List<Domain.Payment.Aggregates.Payment> payments;
 
-            // Récupérer les paiements selon les filtres
             if (request.CustomerId.HasValue)
             {
                 var customerId = CustomerId.Create(request.CustomerId.Value);
@@ -52,7 +51,6 @@ public sealed class GetPaymentHistoryQueryHandler : IRequestHandler<GetPaymentHi
                 payments = await _paymentRepository.GetAllAsync(cancellationToken);
             }
 
-            // Appliquer les filtres additionnels
             if (request.BookingId.HasValue)
             {
                 payments = payments.Where(p => p.BookingId.Value == request.BookingId.Value).ToList();
@@ -68,22 +66,18 @@ public sealed class GetPaymentHistoryQueryHandler : IRequestHandler<GetPaymentHi
                 payments = payments.Where(p => p.Method.Code.Equals(request.PaymentMethod, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
-            // Tri
             payments = ApplySorting(payments, request.SortBy, request.SortDescending);
 
-            // Pagination
             var totalCount = payments.Count;
             var pagedPayments = payments
                 .Skip((request.PageNumber - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .ToList();
 
-            // Conversion en DTOs
             var paymentHistoryDtos = new List<PaymentHistoryDto>();
 
             foreach (var payment in pagedPayments)
             {
-                // Récupérer les informations de réservation pour le contexte
                 var booking = await _bookingRepository.GetByIdAsync(payment.BookingId, cancellationToken);
                 
                 var dto = new PaymentHistoryDto
@@ -101,17 +95,14 @@ public sealed class GetPaymentHistoryQueryHandler : IRequestHandler<GetPaymentHi
                     FailureReason = payment.FailureReason,
                     ProcessingAttempts = payment.ProcessingAttempts,
                     
-                    // Informations sur les remboursements
                     TotalRefundedAmount = payment.GetTotalRefundedAmount().Amount,
                     RemainingAmount = payment.GetRemainingAmount().Amount,
                     HasRefunds = payment.Refunds.Any(),
                     RefundCount = payment.Refunds.Count,
                     
-                    // Informations sur la carte de crédit (masquées)
                     CardType = payment.CreditCard?.CardType,
                     CardLast4Digits = payment.CreditCard?.Last4Digits,
                     
-                    // Informations contextuelles de la réservation
                     BookingReference = booking?.Id.Value.ToString("N")[..8].ToUpperInvariant(),
                     BookingStartDate = booking?.DateRange.StartDate,
                     BookingEndDate = booking?.DateRange.EndDate
@@ -155,7 +146,7 @@ public sealed class GetPaymentHistoryQueryHandler : IRequestHandler<GetPaymentHi
                 : query.OrderBy(p => p.Method.DisplayName),
             _ => sortDescending 
                 ? query.OrderByDescending(p => p.CreatedAt) 
-                : query.OrderBy(p => p.CreatedAt) // Default: CreatedAt
+                : query.OrderBy(p => p.CreatedAt)
         };
 
         return query.ToList();

@@ -21,7 +21,7 @@ public class CustomerAggregate : AggregateRoot<CustomerId>
     private readonly List<CustomerPreference> _preferences = new();
     public IReadOnlyCollection<CustomerPreference> Preferences => _preferences.AsReadOnly();
 
-    private CustomerAggregate() { } // EF Core
+    private CustomerAggregate() { }
 
     private CustomerAggregate(
         CustomerId id,
@@ -181,9 +181,9 @@ public class CustomerAggregate : AggregateRoot<CustomerId>
     {
         return CustomerType.Value switch
         {
-            "VIP" => 0.15m,      // 15% de réduction pour les VIP
-            "Corporate" => 0.10m, // 10% de réduction pour les entreprises
-            _ => 0m               // Pas de réduction pour les particuliers
+            "VIP" => 0.15m,
+            "Corporate" => 0.10m,
+            _ => 0m
         };
     }
 }

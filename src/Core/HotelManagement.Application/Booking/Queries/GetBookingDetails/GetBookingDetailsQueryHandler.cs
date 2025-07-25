@@ -1,3 +1,4 @@
+using HotelManagement.Application.DTOs.Booking;
 using HotelManagement.Domain.Booking;
 using HotelManagement.Domain.Booking.ValueObjects;
 using HotelManagement.Domain.Room;
@@ -23,13 +24,12 @@ public sealed class GetBookingDetailsQueryHandler : IRequestHandler<GetBookingDe
         GetBookingDetailsQuery request,
         CancellationToken cancellationToken)
     {
-        var bookingId = new BookingId(request.BookingId);
+        var bookingId = BookingId.Create(request.BookingId);
         
         var booking = await _bookingRepository.GetByIdWithItemsAsync(bookingId, cancellationToken);
         if (booking == null)
             return Result<BookingDetailsDto>.Failure("Booking not found");
 
-        // Récupérer les détails des chambres pour les items
         var bookingItems = new List<BookingItemDto>();
         
         foreach (var item in booking.Items)
@@ -39,14 +39,14 @@ public sealed class GetBookingDetailsQueryHandler : IRequestHandler<GetBookingDe
             {
                 bookingItems.Add(new BookingItemDto
                 {
-                    BookingItemId = item.Id.Value,
+                    BookingItemId = item.Id,
                     RoomId = item.RoomId.Value,
                     RoomNumber = room.Number.Value,
                     RoomType = room.Type.Name,
                     PricePerNight = item.PricePerNight.Amount,
                     Currency = item.PricePerNight.Currency.Code,
-                    NumberOfNights = item.NumberOfNights,
-                    SubTotal = item.SubTotal.Amount
+                    NumberOfNights = booking.DateRange.GetNights(),
+                    SubTotal = item.PricePerNight.Amount * booking.DateRange.GetNights()
                 });
             }
         }

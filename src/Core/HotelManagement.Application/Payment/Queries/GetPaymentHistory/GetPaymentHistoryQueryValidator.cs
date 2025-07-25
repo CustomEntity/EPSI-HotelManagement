@@ -64,7 +64,6 @@ public sealed class GetPaymentHistoryQueryValidator : AbstractValidator<GetPayme
             .WithMessage($"Sort by must be one of: {string.Join(", ", ValidSortFields)}")
             .When(x => !string.IsNullOrEmpty(x.SortBy));
 
-        // Validation business logic: ne pas permettre de très grandes plages de dates sans autres filtres
         RuleFor(x => x)
             .Must(HaveReasonableScope)
             .WithMessage("When querying large date ranges, please specify CustomerId or BookingId to limit results")
@@ -100,15 +99,12 @@ public sealed class GetPaymentHistoryQueryValidator : AbstractValidator<GetPayme
 
     private static bool HaveReasonableScope(GetPaymentHistoryQuery query)
     {
-        // Si pas de filtre de date, c'est OK
         if (!query.FromDate.HasValue || !query.ToDate.HasValue)
             return true;
 
-        // Si CustomerId ou BookingId est spécifié, c'est OK
         if (query.CustomerId.HasValue || query.BookingId.HasValue)
             return true;
 
-        // Si la plage de dates est raisonnable (moins de 1 an), c'est OK
         var dateRange = query.ToDate.Value - query.FromDate.Value;
         return dateRange.TotalDays <= 365;
     }

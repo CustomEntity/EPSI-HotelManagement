@@ -21,7 +21,6 @@ public sealed class GetRoomsByStatusQueryHandler : IRequestHandler<GetRoomsBySta
     {
         var rooms = await _roomRepository.GetAllAsync(cancellationToken);
 
-        // Filtrer par statut si spécifié
         if (!string.IsNullOrEmpty(request.Status))
         {
             var requestedStatus = GetRoomStatusFromString(request.Status);
@@ -31,7 +30,6 @@ public sealed class GetRoomsByStatusQueryHandler : IRequestHandler<GetRoomsBySta
             }
         }
 
-        // Pagination
         var pagedRooms = rooms
             .Skip((request.PageNumber - 1) * request.PageSize)
             .Take(request.PageSize)

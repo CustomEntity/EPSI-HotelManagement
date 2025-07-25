@@ -15,17 +15,14 @@ public sealed class PaymentHistoryDto
     public string? FailureReason { get; init; }
     public int ProcessingAttempts { get; init; }
     
-    // Informations sur les remboursements
     public decimal TotalRefundedAmount { get; init; }
     public decimal RemainingAmount { get; init; }
     public bool HasRefunds { get; init; }
     public int RefundCount { get; init; }
     
-    // Informations sur la carte de crédit (masquées)
     public string? CardType { get; init; }
     public string? CardLast4Digits { get; init; }
     
-    // Informations contextuelles
     public string? BookingReference { get; init; }
     public DateTime? BookingStartDate { get; init; }
     public DateTime? BookingEndDate { get; init; }

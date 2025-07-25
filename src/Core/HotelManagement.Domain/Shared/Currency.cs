@@ -33,12 +33,10 @@ public class Currency : ValueObject
         if (!IsValidCurrencyCode(normalizedCode))
             return Result<Currency>.Failure("Currency code must contain only letters");
 
-        // Retourner les instances prédéfinies si elles existent
         var predefinedCurrency = GetPredefinedCurrency(normalizedCode);
         if (predefinedCurrency != null)
             return Result<Currency>.Success(predefinedCurrency);
 
-        // Créer une nouvelle instance avec un symbole par défaut
         return Result<Currency>.Success(new Currency(normalizedCode, normalizedCode));
     }
 

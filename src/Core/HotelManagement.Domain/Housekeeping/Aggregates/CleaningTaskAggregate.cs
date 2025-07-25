@@ -22,7 +22,7 @@ public class CleaningTaskAggregate : AggregateRoot<CleaningTaskId>
     public string? DamageDescription { get; private set; }
     public decimal? EstimatedRepairCost { get; private set; }
 
-    private CleaningTaskAggregate() { } // EF Constructor
+    private CleaningTaskAggregate() { }
 
     private CleaningTaskAggregate(
         CleaningTaskId id,

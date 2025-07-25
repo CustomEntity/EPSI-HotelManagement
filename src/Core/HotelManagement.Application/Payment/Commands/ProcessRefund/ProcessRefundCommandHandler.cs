@@ -25,14 +25,12 @@ public sealed class ProcessRefundCommandHandler : IRequestHandler<ProcessRefundC
 
     public async Task<Result<Guid>> Handle(ProcessRefundCommand request, CancellationToken cancellationToken)
     {
-        // Validation de base
         if (request.Amount <= 0)
             return Result<Guid>.Failure("Refund amount must be greater than zero");
 
         if (string.IsNullOrWhiteSpace(request.Reason))
             return Result<Guid>.Failure("Refund reason is required");
             
-        // Création des value objects
         var refundPaymentId = PaymentId.Create(request.PaymentId);
         
         var currencyResult = Currency.Create(request.Currency);
@@ -43,33 +41,27 @@ public sealed class ProcessRefundCommandHandler : IRequestHandler<ProcessRefundC
         if (moneyResult.IsFailure)
             return Result<Guid>.Failure(moneyResult.Error);
 
-        // Récupérer le paiement avec les remboursements
         var payment = await _paymentRepository.GetByIdWithRefundsAsync(refundPaymentId, cancellationToken);
         if (payment == null)
             return Result<Guid>.Failure("Payment not found");
 
-        // Vérifier que le paiement peut être remboursé
         if (!payment.Status.CanBeRefunded())
             return Result<Guid>.Failure($"Payment cannot be refunded in status: {payment.Status}");
 
-        // Demander le remboursement (cela crée l'entité Refund)
         var refundRequestResult = payment.RequestRefund(moneyResult.Value, request.Reason);
         if (refundRequestResult.IsFailure)
             return Result<Guid>.Failure(refundRequestResult.Error);
 
         var refund = refundRequestResult.Value;
 
-        // Traiter le remboursement via la passerelle de paiement
         var processResult = await payment.ProcessRefundAsync(refund.Id, _paymentGateway);
         if (processResult.IsFailure)
         {
-            // Sauvegarder même en cas d'échec pour garder une trace
             await _paymentRepository.UpdateAsync(payment, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             return Result<Guid>.Failure(processResult.Error);
         }
 
-        // Sauvegarder le remboursement réussi
         await _paymentRepository.UpdateAsync(payment, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

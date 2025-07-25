@@ -94,7 +94,6 @@ public class Payment : AggregateRoot<PaymentId>
             }
             else
             {
-                // Pour les paiements cash ou virement, créer une référence manuelle
                 result = Result<TransactionReference>.Success(
                     TransactionReference.Create(
                         $"MANUAL-{Guid.NewGuid():N}",
@@ -231,7 +230,6 @@ public class Payment : AggregateRoot<PaymentId>
 
         if (totalRefunded.Amount == 0)
         {
-            // Pas de remboursement
             if (Status == PaymentStatus.Refunded || Status == PaymentStatus.PartiallyRefunded)
                 Status = PaymentStatus.Completed;
         }

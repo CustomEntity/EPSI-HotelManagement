@@ -12,7 +12,7 @@ public class CustomerPreference : Entity
     public DateTime CreatedAt { get; private set; }
     public DateTime? UpdatedAt { get; private set; }
 
-    private CustomerPreference() { } // EF Core
+    private CustomerPreference() { }
 
     private CustomerPreference(
         CustomerId customerId, 

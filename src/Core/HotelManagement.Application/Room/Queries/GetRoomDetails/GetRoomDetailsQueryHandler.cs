@@ -46,13 +46,11 @@ public sealed class GetRoomDetailsQueryHandler : IRequestHandler<GetRoomDetailsQ
 
     private List<string> GetRoomFeatures(Domain.Room.Aggregates.Room room)
     {
-        // Implémentation pour récupérer les caractéristiques de la chambre
         return new List<string> { "WiFi", "Air Conditioning", "Mini Bar" };
     }
 
     private List<string> GetMaintenanceNotes(Domain.Room.Aggregates.Room room)
     {
-        // Implémentation pour récupérer les notes de maintenance
         return new List<string>();
     }
 }

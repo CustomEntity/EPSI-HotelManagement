@@ -11,7 +11,6 @@ public sealed class ProcessPaymentCommand : IRequest<Result<Guid>>
     public string Currency { get; init; } = "EUR";
     public string PaymentMethod { get; init; } = string.Empty;
     
-    // Propriétés pour carte de crédit (optionnelles)
     public string? CardNumber { get; init; }
     public string? CardHolderName { get; init; }
     public int? ExpiryMonth { get; init; }

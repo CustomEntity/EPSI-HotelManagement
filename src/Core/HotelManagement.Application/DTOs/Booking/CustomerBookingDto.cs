@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using HotelManagement.Domain.Booking.ValueObjects;
-using HotelManagement.Domain.Shared;
-
 namespace HotelManagement.Application.DTOs.Booking;
 
 public class CustomerBookingDto

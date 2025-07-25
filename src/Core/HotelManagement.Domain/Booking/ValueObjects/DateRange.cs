@@ -10,7 +10,7 @@ public sealed class DateRange : ValueObject
 
     private DateRange(DateTime startDate, DateTime endDate)
     {
-        StartDate = startDate.Date; // Normaliser à minuit
+        StartDate = startDate.Date;
         EndDate = endDate.Date;
     }
 

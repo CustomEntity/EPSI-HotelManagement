@@ -61,7 +61,7 @@ public class Booking : AggregateRoot<BookingId>
             booking.Id,
             customerId,
             dateRange,
-            0)); // Sera mis à jour quand on ajoute des chambres
+            0));
 
         return Result<Booking>.Success(booking);
     }
@@ -71,7 +71,6 @@ public class Booking : AggregateRoot<BookingId>
         if (Status != BookingStatus.Pending)
             return Result.Failure("Cannot add rooms to a non-pending booking");
 
-        // Vérifier si la chambre est déjà dans la réservation
         if (_items.Any(i => i.RoomId.Value == roomId.Value))
             return Result.Failure("Room is already in the booking");
 
@@ -215,10 +214,10 @@ public class Booking : AggregateRoot<BookingId>
     private decimal CalculateRefundPercentage(bool byReceptionist)
     {
         if (Status == BookingStatus.Pending)
-            return 100; // Réservation non confirmée = remboursement complet
+            return 100;
 
         if (byReceptionist)
-            return 100; // La réceptionniste peut forcer le remboursement
+            return 100;
 
         return CancellationPolicy.CalculateRefundPercentage(DateRange.StartDate);
     }
@@ -246,19 +245,15 @@ public class Booking : AggregateRoot<BookingId>
         var checkedInItems = _items.Where(i => i.Status == BookingItemStatus.CheckedIn).ToList();
         var checkedOutItems = _items.Where(i => i.Status == BookingItemStatus.CheckedOut).ToList();
         
-        // Tous check-out = CheckedOut
         if (checkedOutItems.Count == _items.Count)
             return BookingStatus.CheckedOut;
             
-        // Tous check-in = CheckedIn
         if (checkedInItems.Count == _items.Count)
             return BookingStatus.CheckedIn;
             
-        // Mélange avec au moins un check-in = PartiallyCheckedIn
         if (checkedInItems.Any())
             return BookingStatus.PartiallyCheckedIn;
             
-        // Tous confirmés = Confirmed
         if (confirmedItems.Count == _items.Count)
             return BookingStatus.Confirmed;
             
@@ -275,13 +270,11 @@ public class Booking : AggregateRoot<BookingId>
         if (result.IsFailure)
             return result;
             
-        // Mise à jour intelligente du statut global
         var newStatus = CalculateCurrentStatus();
         if (Status != newStatus)
         {
             Status = newStatus;
             
-            // Si c'est le premier check-in, marquer l'heure globale
             if ((newStatus == BookingStatus.PartiallyCheckedIn || newStatus == BookingStatus.CheckedIn) 
                 && CheckInTime == null)
             {
@@ -304,7 +297,6 @@ public class Booking : AggregateRoot<BookingId>
         if (result.IsFailure)
             return result;
             
-        // Mise à jour du statut global
         var newStatus = CalculateCurrentStatus();
         if (Status != newStatus)
         {
@@ -335,26 +327,4 @@ public class Booking : AggregateRoot<BookingId>
         _items.Where(i => i.Status == BookingItemStatus.Confirmed)
               .Select(i => i.RoomId)
               .ToList();
-
-    // Garder CheckOut() pour les checkout complets si nécessaire
-    public Result CheckOut()
-    {
-        if (!Status.CanCheckOut())
-            return Result.Failure($"Cannot check out with status: {Status}");
-
-        // Checkout de toutes les chambres
-        foreach (var item in _items.Where(i => i.Status == BookingItemStatus.CheckedIn))
-        {
-            item.CheckOut();
-        }
-
-        Status = BookingStatus.CheckedOut;
-        CheckOutTime = DateTime.UtcNow;
-        ModifiedAt = DateTime.UtcNow;
-
-        var roomIds = _items.Select(i => i.RoomId).ToList();
-        AddDomainEvent(new GuestCheckedOutEvent(Id, roomIds, CheckOutTime.Value));
-
-        return Result.Success();
-    }
 }

@@ -34,6 +34,6 @@ public sealed class CheckOutCommandValidator : AbstractValidator<CheckOutCommand
 
     private bool NotBeInFuture(DateTime checkOutTime)
     {
-        return checkOutTime <= DateTime.UtcNow.AddHours(1); // Permettre 1h de marge pour les décalages d'horloge
+        return checkOutTime <= DateTime.UtcNow.AddHours(1);
     }
 }

@@ -29,25 +29,20 @@ public sealed class CheckOutCommandHandler : IRequestHandler<CheckOutCommand, Re
         var roomId = new RoomId(request.RoomId);
         var bookingId = BookingId.Create(request.BookingId);
 
-        // Récupérer la chambre
         var room = await _roomRepository.GetByIdAsync(roomId, cancellationToken);
         if (room == null)
             return Result.Failure("Room not found");
 
-        // Récupérer la réservation
         var booking = await _bookingRepository.GetByIdAsync(bookingId, cancellationToken);
         if (booking == null)
             return Result.Failure("Booking not found");
 
-        // Vérifier que la réservation contient cette chambre
         if (!booking.GetRoomIds().Contains(roomId))
             return Result.Failure("This room is not part of the specified booking");
 
-        // Vérifier que la réservation peut faire des check-outs
         if (!booking.Status.CanCheckOut())
             return Result.Failure($"Booking cannot check out with status: {booking.Status}");
 
-        // Vérifier que c'est le bon moment pour le check-out
         var checkOutDate = request.CheckOutTime.Date;
         if (checkOutDate < booking.DateRange.StartDate.Date)
             return Result.Failure("Check-out date cannot be before the booking start date");
@@ -55,21 +50,17 @@ public sealed class CheckOutCommandHandler : IRequestHandler<CheckOutCommand, Re
         if (checkOutDate > booking.DateRange.EndDate.Date.AddDays(1))
             return Result.Failure("Check-out date is too late. Contact front desk for late check-out");
 
-        // Vérifier que la chambre est actuellement occupée
         if (room.Status != RoomStatus.Occupied)
             return Result.Failure($"Room cannot be checked out. Current status: {room.Status}");
 
-        // Effectuer le check-out de la chambre
         var checkOutResult = room.CheckOut();
         if (checkOutResult.IsFailure)
             return checkOutResult;
 
-        // Check-out granulaire au niveau réservation
         var updateBookingResult = booking.CheckOutRoom(roomId);
         if (updateBookingResult.IsFailure)
             return updateBookingResult;
 
-        // Sauvegarder les changements
         await _roomRepository.UpdateAsync(room, cancellationToken);
         await _bookingRepository.UpdateAsync(booking, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
