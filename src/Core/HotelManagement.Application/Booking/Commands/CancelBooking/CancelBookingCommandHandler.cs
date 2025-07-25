@@ -29,7 +29,7 @@ public sealed class CancelBookingCommandHandler : IRequestHandler<CancelBookingC
         {
             _logger.LogInformation("Starting booking cancellation for BookingId: {BookingId}", request.BookingId);
 
-            var bookingId = new BookingId(request.BookingId);
+            var bookingId = BookingId.Create(request.BookingId);
             var booking = await _bookingRepository.GetByIdAsync(bookingId, cancellationToken);
 
             if (booking == null)
