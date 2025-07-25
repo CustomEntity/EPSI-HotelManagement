@@ -84,8 +84,7 @@ public class RoomController : ControllerBase
 
             _logger.LogInformation(
                 "Found {RoomCount} available rooms",
-                rooms.Count,
-                _currentUserService.UserId);
+                rooms.Count);
 
             return Ok(rooms);
         }
