@@ -26,8 +26,8 @@ public sealed class ConfirmBookingPaymentCommandHandler : IRequestHandler<Confir
 
     public async Task<Result> Handle(ConfirmBookingPaymentCommand request, CancellationToken cancellationToken)
     {
-        var bookingId = new BookingId(request.BookingId);
-        var paymentId = new PaymentId(request.PaymentId);
+        var bookingId = BookingId.Create(request.BookingId);
+        var paymentId = PaymentId.Create(request.PaymentId);
 
         // Récupérer la réservation
         var booking = await _bookingRepository.GetByIdAsync(bookingId, cancellationToken);
