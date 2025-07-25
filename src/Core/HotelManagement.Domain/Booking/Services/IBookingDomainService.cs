@@ -1,5 +1,6 @@
-using HotelManagement.Domain.Booking.Aggregates;
 using HotelManagement.Domain.Booking.ValueObjects;
+using HotelManagement.Domain.Customer.ValueObjects;
+using HotelManagement.Domain.Room.ValueObjects;
 using HotelManagement.Domain.Shared;
 
 namespace HotelManagement.Domain.Booking.Services;
@@ -7,8 +8,12 @@ namespace HotelManagement.Domain.Booking.Services;
 public interface IBookingDomainService
 {
     Task<bool> IsRoomAvailableAsync(RoomId roomId, DateRange dateRange, CancellationToken cancellationToken = default);
-    Task<Result<Money>> CalculateBookingCostAsync(BookingRequest request, CancellationToken cancellationToken = default);
-    Task<Result<bool>> ValidateBookingRulesAsync(BookingAggregate booking, CancellationToken cancellationToken = default);
+
+    Task<Result<Money>>
+        CalculateBookingCostAsync(BookingRequest request, CancellationToken cancellationToken = default);
+
+    Task<Result<bool>> ValidateBookingRulesAsync(Aggregates.Booking booking,
+        CancellationToken cancellationToken = default);
 }
 
 public class BookingRequest
@@ -35,4 +40,4 @@ public class RoomBookingInfo
         RoomId = roomId;
         NumberOfGuests = numberOfGuests;
     }
-} 
+}

@@ -7,18 +7,15 @@ public sealed class GetAvailableRoomsQuery : IRequest<Result<List<AvailableRoomD
 {
     public DateTime StartDate { get; init; }
     public DateTime EndDate { get; init; }
-    public int? MinOccupancy { get; init; }
-    public int? MaxOccupancy { get; init; }
 }
 
 public sealed class AvailableRoomDto
 {
     public Guid RoomId { get; init; }
-    public string RoomNumber { get; init; } = string.Empty;
-    public string RoomTypeName { get; init; } = string.Empty;
-    public decimal PricePerNight { get; init; }
-    public string Currency { get; init; } = string.Empty;
-    public int MaxOccupancy { get; init; }
-    public string Status { get; init; } = string.Empty;
-    public string Condition { get; init; } = string.Empty;
+    public string RoomNumber { get; init; } = null!;
+    public string RoomType { get; init; } = null!;
+    public string RoomStatus { get; init; } = null!;
+    public string? RoomCondition { get; init; } = null!;
+    public DateTime CreatedAt { get; init; }
+    public DateTime? ModifiedAt { get; init; }
 }
