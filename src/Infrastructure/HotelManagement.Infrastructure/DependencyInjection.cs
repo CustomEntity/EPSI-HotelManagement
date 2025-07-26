@@ -9,12 +9,19 @@ using System.Text;
 using HotelManagement.Domain.Booking;
 using HotelManagement.Domain.Booking.Services;
 using HotelManagement.Domain.Common;
+using HotelManagement.Domain.Customer;
+using HotelManagement.Domain.Housekeeping.Repositories;
+using HotelManagement.Domain.Housekeeping.Services;
+using HotelManagement.Domain.Payment;
+using HotelManagement.Domain.Payment.Services;
 using HotelManagement.Domain.Room;
 using HotelManagement.Identity.Data;
 using HotelManagement.Identity.Models;
 using HotelManagement.Identity.Services;
 using HotelManagement.Infrastructure.Features.Booking.Repositories;
 using HotelManagement.Infrastructure.Features.Booking.Services;
+using HotelManagement.Infrastructure.Features.HouseKeeping.Services;
+using HotelManagement.Infrastructure.Features.Payment.Services;
 using HotelManagement.Infrastructure.Features.Repositories;
 using HotelManagement.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -45,6 +52,10 @@ public static class DependencyInjection
         
         services.AddScoped<IUnitOfWork, InMemoryUnitOfWork>();
         
+        services.AddScoped<IPaymentRepository, InMemoryPaymentRepository>();
+        services.AddScoped<ICleaningTaskRepository, InMemoryCleaningTaskRepository>();
+        services.AddScoped<ICustomerRepository, InMemoryCustomerRepository>();
+        
         services.AddDomainServices();
         
         return services;
@@ -54,6 +65,9 @@ public static class DependencyInjection
         this IServiceCollection services)
     {
         services.AddScoped<IBookingDomainService, BookingDomainService>();
+        services.AddScoped<IPaymentGateway, FakePaymentGateway>();
+        services.AddScoped<IHousekeepingNotificationService, FakeHousekeepingNotificationService>();
+
 
         return services;
     }

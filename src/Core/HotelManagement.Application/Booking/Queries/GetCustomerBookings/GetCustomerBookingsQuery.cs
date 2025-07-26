@@ -13,12 +13,3 @@ public sealed class GetCustomerBookingsQuery : IRequest<Result<List<CustomerBook
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
 }
-
-public sealed class BookingRoomSummaryDto
-{
-    public Guid RoomId { get; init; }
-    public string RoomNumber { get; init; } = null!;
-    public string RoomType { get; init; } = null!;
-    public decimal PricePerNight { get; init; }
-    public string Currency { get; init; } = null!;
-}

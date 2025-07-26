@@ -36,4 +36,19 @@ public sealed class BookingStatus : ValueObject
     public override string ToString() => Value;
 
     public static implicit operator string(BookingStatus status) => status.Value;
+    
+    public static BookingStatus? FromString(string value)
+    {
+        return value?.ToLowerInvariant() switch
+        {
+            "pending" => Pending,
+            "confirmed" => Confirmed,
+            "partiallycheckedin" => PartiallyCheckedIn,
+            "checkedin" => CheckedIn,
+            "checkedout" => CheckedOut,
+            "cancelled" => Cancelled,
+            "noshow" => NoShow,
+            _ => null
+        };
+    }
 }

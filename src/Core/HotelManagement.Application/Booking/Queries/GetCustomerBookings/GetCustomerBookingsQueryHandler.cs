@@ -1,3 +1,4 @@
+using HotelManagement.Application.DTOs.Booking;
 using HotelManagement.Domain.Booking;
 using HotelManagement.Domain.Booking.ValueObjects;
 using HotelManagement.Domain.Customer.ValueObjects;
@@ -7,7 +8,8 @@ using MediatR;
 
 namespace HotelManagement.Application.Booking.Queries.GetCustomerBookings;
 
-public sealed class GetCustomerBookingsQueryHandler : IRequestHandler<GetCustomerBookingsQuery, Result<List<CustomerBookingDto>>>
+public sealed class
+    GetCustomerBookingsQueryHandler : IRequestHandler<GetCustomerBookingsQuery, Result<List<CustomerBookingDto>>>
 {
     private readonly IBookingRepository _bookingRepository;
     private readonly IRoomRepository _roomRepository;
@@ -25,15 +27,16 @@ public sealed class GetCustomerBookingsQueryHandler : IRequestHandler<GetCustome
         CancellationToken cancellationToken)
     {
         var customerId = CustomerId.Create(request.CustomerId);
-        
+
         var bookings = await _bookingRepository.GetByCustomerIdAsync(customerId, cancellationToken);
-        
+
         // Filtrer par statut si spécifié
         if (!string.IsNullOrEmpty(request.Status))
         {
-            if (Enum.TryParse<BookingStatus>(request.Status, true, out var status))
+            var targetStatus = BookingStatus.FromString(request.Status);
+            if (targetStatus != null)
             {
-                bookings = bookings.Where(b => b.Status == status).ToList();
+                bookings = bookings.Where(b => b.Status == targetStatus).ToList();
             }
         }
 
@@ -98,7 +101,6 @@ public sealed class GetCustomerBookingsQueryHandler : IRequestHandler<GetCustome
                 CheckOutTime = booking.CheckOutTime,
                 CreatedAt = booking.CreatedAt,
                 NumberOfRooms = booking.Items.Count,
-                NumberOfNights = booking.DateRange.GetNumberOfNights(),
                 Rooms = roomSummaries
             };
 
