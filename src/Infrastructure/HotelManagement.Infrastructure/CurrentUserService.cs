@@ -1,9 +1,9 @@
+using System.Security.Claims;
 using HotelManagement.Application.Common.Interfaces;
 using HotelManagement.Identity.Domain;
 using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
 
-namespace HotelManagement.Infrastructure.Services;
+namespace HotelManagement.Infrastructure;
 
 public class CurrentUserService : ICurrentUserService
 {

@@ -1,5 +1,4 @@
 using HotelManagement.Application.Common.Interfaces;
-using HotelManagement.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

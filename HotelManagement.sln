@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{93524B3F-BBA0-40A6-9797-1D152C5CCC31}"
+	ProjectSection(SolutionItems) = preProject
+		Dockerfile = Dockerfile
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{330BA33A-A420-4920-AAAD-39074C2F7CD3}"
 EndProject
@@ -30,6 +33,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelManagement.Infrastructure.Tests", "tests\HotelManagement.Infrastructure.Tests\HotelManagement.Infrastructure.Tests.csproj", "{CDAF3F97-4897-4BB0-B52B-F4A77F2ED1F1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelManagement.API.Tests", "tests\HotelManagement.API.Tests\HotelManagement.API.Tests.csproj", "{889F42DD-7342-45FA-A9F9-C9FE39C9A34F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelManagement.SharedKernel", "src\Core\HotelManagement.SharedKernel\HotelManagement.SharedKernel.csproj", "{AC2ACF6C-1FD2-4439-96D1-89C8907F1C56}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -76,6 +81,10 @@ Global
 		{889F42DD-7342-45FA-A9F9-C9FE39C9A34F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{889F42DD-7342-45FA-A9F9-C9FE39C9A34F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{889F42DD-7342-45FA-A9F9-C9FE39C9A34F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC2ACF6C-1FD2-4439-96D1-89C8907F1C56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC2ACF6C-1FD2-4439-96D1-89C8907F1C56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC2ACF6C-1FD2-4439-96D1-89C8907F1C56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC2ACF6C-1FD2-4439-96D1-89C8907F1C56}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{330BA33A-A420-4920-AAAD-39074C2F7CD3} = {93524B3F-BBA0-40A6-9797-1D152C5CCC31}
@@ -90,5 +99,6 @@ Global
 		{00FC5E0B-32F8-44DE-BC19-4CA71E230755} = {86050EA9-6461-42CC-B5E2-4B02012A2411}
 		{CDAF3F97-4897-4BB0-B52B-F4A77F2ED1F1} = {86050EA9-6461-42CC-B5E2-4B02012A2411}
 		{889F42DD-7342-45FA-A9F9-C9FE39C9A34F} = {86050EA9-6461-42CC-B5E2-4B02012A2411}
+		{AC2ACF6C-1FD2-4439-96D1-89C8907F1C56} = {330BA33A-A420-4920-AAAD-39074C2F7CD3}
 	EndGlobalSection
 EndGlobal

@@ -2,22 +2,27 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copier les fichiers csproj nécessaires
-COPY ../../../HotelManagement.sln ./
-COPY ../../Core/HotelManagement.Application/*.csproj Core/HotelManagement.Application/
-COPY ../../Core/HotelManagement.Domain/*.csproj Core/HotelManagement.Domain/
-COPY ../../Infrastructure/HotelManagement.Identity/*.csproj Infrastructure/HotelManagement.Identity/
-COPY ../../Infrastructure/HotelManagement.Infrastructure/*.csproj Infrastructure/HotelManagement.Infrastructure/
-COPY ./*.csproj .
+# Copier les fichiers sln et csproj
+COPY *.sln ./
+COPY src/Core/HotelManagement.Application/*.csproj src/Core/HotelManagement.Application/
+COPY src/Core/HotelManagement.Domain/*.csproj src/Core/HotelManagement.Domain/
+COPY src/Infrastructure/HotelManagement.Identity/*.csproj src/Infrastructure/HotelManagement.Identity/
+COPY src/Infrastructure/HotelManagement.Infrastructure/*.csproj src/Infrastructure/HotelManagement.Infrastructure/
+COPY src/Presentation/HotelManagement.API/*.csproj src/Presentation/HotelManagement.API/
 
-# Restauration
+COPY tests/HotelManagement.Domain.Tests/*.csproj tests/HotelManagement.Domain.Tests/
+COPY tests/HotelManagement.Application.Tests/*.csproj tests/HotelManagement.Application.Tests/
+COPY tests/HotelManagement.Infrastructure.Tests/*.csproj tests/HotelManagement.Infrastructure.Tests/
+COPY tests/HotelManagement.API.Tests/*.csproj tests/HotelManagement.API.Tests/
+
+# Restauration des dépendances
 RUN dotnet restore
 
-# Copier tout le code source
-COPY ../../ .
+# Copier le reste des fichiers
+COPY . .
 
-# Build de l’API
-WORKDIR /src/Presentation/HotelManagement.API
+# Compiler et publier
+WORKDIR /src/src/Presentation/HotelManagement.API
 RUN dotnet publish -c Release -o /app/publish
 
 # Étape 2 : Runtime
@@ -27,4 +32,5 @@ COPY --from=build /app/publish .
 
 EXPOSE 5000
 ENV ASPNETCORE_URLS=http://+:5000
+
 ENTRYPOINT ["dotnet", "HotelManagement.API.dll"]
