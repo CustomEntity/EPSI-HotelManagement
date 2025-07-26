@@ -1,7 +1,6 @@
-using HotelManagement.Domain.Booking;
+using HotelManagement.Application.DTOs.Booking;
 using HotelManagement.Domain.Booking.ValueObjects;
 using HotelManagement.Domain.Room;
-using HotelManagement.Domain.Room.ValueObjects;
 using HotelManagement.Domain.Shared;
 using MediatR;
 

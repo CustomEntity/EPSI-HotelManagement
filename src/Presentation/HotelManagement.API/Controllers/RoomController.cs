@@ -1,5 +1,6 @@
 using HotelManagement.Application.Booking.Queries.GetAvailableRooms;
 using HotelManagement.Application.Common.Interfaces;
+using HotelManagement.Application.DTOs.Booking;
 using HotelManagement.Identity.Domain;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

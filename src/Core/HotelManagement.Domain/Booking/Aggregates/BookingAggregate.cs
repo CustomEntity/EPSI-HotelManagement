@@ -61,7 +61,7 @@ public class Booking : AggregateRoot<BookingId>
             booking.Id,
             customerId,
             dateRange,
-            0)); // Sera mis à jour quand on ajoute des chambres
+            0));
 
         return Result<Booking>.Success(booking);
     }
@@ -71,7 +71,6 @@ public class Booking : AggregateRoot<BookingId>
         if (Status != BookingStatus.Pending)
             return Result.Failure("Cannot add rooms to a non-pending booking");
 
-        // Vérifier si la chambre est déjà dans la réservation
         if (_items.Any(i => i.RoomId.Value == roomId.Value))
             return Result.Failure("Room is already in the booking");
 
@@ -215,10 +214,10 @@ public class Booking : AggregateRoot<BookingId>
     private decimal CalculateRefundPercentage(bool byReceptionist)
     {
         if (Status == BookingStatus.Pending)
-            return 100; // Réservation non confirmée = remboursement complet
+            return 100;
 
         if (byReceptionist)
-            return 100; // La réceptionniste peut forcer le remboursement
+            return 100;
 
         return CancellationPolicy.CalculateRefundPercentage(DateRange.StartDate);
     }
@@ -237,4 +236,95 @@ public class Booking : AggregateRoot<BookingId>
 
     public List<RoomId> GetRoomIds() =>
         _items.Select(i => i.RoomId).ToList();
+
+    public BookingStatus CalculateCurrentStatus()
+    {
+        if (!_items.Any()) return Status;
+        
+        var confirmedItems = _items.Where(i => i.Status == BookingItemStatus.Confirmed).ToList();
+        var checkedInItems = _items.Where(i => i.Status == BookingItemStatus.CheckedIn).ToList();
+        var checkedOutItems = _items.Where(i => i.Status == BookingItemStatus.CheckedOut).ToList();
+        
+        if (checkedOutItems.Count == _items.Count)
+            return BookingStatus.CheckedOut;
+            
+        if (checkedInItems.Count == _items.Count)
+            return BookingStatus.CheckedIn;
+            
+        if (checkedInItems.Any())
+            return BookingStatus.PartiallyCheckedIn;
+            
+        if (confirmedItems.Count == _items.Count)
+            return BookingStatus.Confirmed;
+            
+        return Status;
+    }
+
+    public Result CheckInRoom(RoomId roomId)
+    {
+        var item = _items.FirstOrDefault(i => i.RoomId.Value == roomId.Value);
+        if (item == null)
+            return Result.Failure("Room not found in booking");
+            
+        var result = item.CheckIn();
+        if (result.IsFailure)
+            return result;
+            
+        var newStatus = CalculateCurrentStatus();
+        if (Status != newStatus)
+        {
+            Status = newStatus;
+            
+            if ((newStatus == BookingStatus.PartiallyCheckedIn || newStatus == BookingStatus.CheckedIn) 
+                && CheckInTime == null)
+            {
+                CheckInTime = DateTime.UtcNow;
+            }
+        }
+        
+        ModifiedAt = DateTime.UtcNow;
+        AddDomainEvent(new RoomCheckedInEvent(Id, roomId, DateTime.UtcNow));
+        return Result.Success();
+    }
+
+    public Result CheckOutRoom(RoomId roomId)
+    {
+        var item = _items.FirstOrDefault(i => i.RoomId.Value == roomId.Value);
+        if (item == null)
+            return Result.Failure("Room not found in booking");
+            
+        var result = item.CheckOut();
+        if (result.IsFailure)
+            return result;
+            
+        var newStatus = CalculateCurrentStatus();
+        if (Status != newStatus)
+        {
+            Status = newStatus;
+            if (newStatus == BookingStatus.CheckedOut)
+            {
+                CheckOutTime = DateTime.UtcNow;
+            }
+        }
+        
+        ModifiedAt = DateTime.UtcNow;
+        AddDomainEvent(new RoomCheckedOutEvent(Id, roomId, DateTime.UtcNow));
+        return Result.Success();
+    }
+
+    public bool IsFullyCheckedIn() => 
+        _items.All(i => i.Status == BookingItemStatus.CheckedIn);
+        
+    public bool IsPartiallyCheckedIn() => 
+        _items.Any(i => i.Status == BookingItemStatus.CheckedIn) && !IsFullyCheckedIn();
+        
+    public List<RoomId> GetCheckedInRooms() =>
+        _items.Where(i => i.Status == BookingItemStatus.CheckedIn)
+              .Select(i => i.RoomId)
+              .ToList();
+              
+    public List<RoomId> GetPendingCheckInRooms() =>
+        _items.Where(i => i.Status == BookingItemStatus.Confirmed)
+              .Select(i => i.RoomId)
+              .ToList();
 }

@@ -19,7 +19,6 @@ public class BookingDomainService(IBookingRepository bookingRepository) : IBooki
     public Task<Result<Money>> CalculateBookingCostAsync(BookingRequest request,
         CancellationToken cancellationToken = default)
     {
-        // Implémentation basique temporaire
         var totalCost = new Money(100 * request.Rooms.Count * request.DateRange.GetNights(), Currency.EUR);
         return Task.FromResult(Result<Money>.Success(totalCost));
     }
@@ -27,7 +26,6 @@ public class BookingDomainService(IBookingRepository bookingRepository) : IBooki
     public Task<Result<bool>> ValidateBookingRulesAsync(Domain.Booking.Aggregates.Booking booking,
         CancellationToken cancellationToken = default)
     {
-        // Validation basique temporaire
         if (!booking.Items.Any())
             return Task.FromResult(Result<bool>.Failure("Booking must have at least one room"));
 

@@ -47,8 +47,6 @@ public class InMemoryRoomRepository : IRoomRepository
         DateRange dateRange,
         CancellationToken cancellationToken = default)
     {
-        // Pour le moment, retournons toutes les chambres disponibles
-        // Plus tard, vous vérifierez les réservations avec IBookingRepository
         var availableRooms = _rooms
             .Where(r => r.Status == RoomStatus.Available)
             .ToList();
@@ -89,7 +87,6 @@ public class InMemoryRoomRepository : IRoomRepository
     {
         try
         {
-            // Créez quelques chambres de test
             var roomType1 = CreateTestRoomType("Standard", new Money(100, Currency.EUR));
             var roomType2 = CreateTestRoomType("Deluxe", new Money(150, Currency.EUR));
 
@@ -121,7 +118,7 @@ public class InMemoryRoomRepository : IRoomRepository
             return new Room(
                 roomNumber.Value,
                 type,
-                RoomCondition.Good); // ou la valeur par défaut appropriée
+                RoomCondition.Good);
         }
         catch
         {

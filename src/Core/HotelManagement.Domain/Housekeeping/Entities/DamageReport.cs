@@ -16,7 +16,7 @@ public class DamageReport : Entity
     public decimal? ActualRepairCost { get; private set; }
     public string? RepairNotes { get; private set; }
 
-    private DamageReport() { } // EF Constructor
+    private DamageReport() { }
 
     public DamageReport(
         CleaningTaskId cleaningTaskId,

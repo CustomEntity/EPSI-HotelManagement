@@ -26,7 +26,7 @@ public sealed class Email : ValueObject
         if (!EmailRegex.IsMatch(email))
             throw new ArgumentException("Invalid email format", nameof(email));
 
-        if (email.Length > 320) // RFC 5321 limit
+        if (email.Length > 320)
             throw new ArgumentException("Email address is too long", nameof(email));
 
         return new Email(email);

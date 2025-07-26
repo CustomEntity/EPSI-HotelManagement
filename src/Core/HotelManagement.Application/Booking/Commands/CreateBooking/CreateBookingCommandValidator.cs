@@ -57,7 +57,6 @@ public sealed class BookRoomCommandValidator : AbstractValidator<BookRoomCommand
             .WithMessage("Special requests cannot exceed 500 characters")
             .When(x => !string.IsNullOrWhiteSpace(x.SpecialRequests));
 
-        // Validation des informations de paiement si RequirePayment est true
         When(x => x.RequirePayment && x.PaymentInfo != null, () =>
         {
             RuleFor(x => x.PaymentInfo!.CardNumber)
@@ -92,7 +91,6 @@ public sealed class BookRoomCommandValidator : AbstractValidator<BookRoomCommand
                 .WithMessage("Security code must be 3 or 4 digits");
         });
 
-        // Si RequirePayment est true mais PaymentInfo est null
         When(x => x.RequirePayment && x.PaymentInfo == null, () =>
         {
             RuleFor(x => x.PaymentInfo)

@@ -25,13 +25,11 @@ public sealed class PhoneNumber : ValueObject
         if (string.IsNullOrWhiteSpace(phoneNumber))
             throw new ArgumentException("Phone number cannot be null or empty", nameof(phoneNumber));
 
-        // Nettoyer le numéro (supprimer espaces, tirets, parenthèses)
         var cleaned = Regex.Replace(phoneNumber.Trim(), @"[\s\-\(\)]", "");
 
         if (!PhoneRegex.IsMatch(cleaned))
             throw new ArgumentException("Invalid phone number format", nameof(phoneNumber));
 
-        // Extraire l'indicatif pays (simplification)
         string countryCode = "";
         string number = cleaned;
         
@@ -46,7 +44,6 @@ public sealed class PhoneNumber : ValueObject
         }
         else if (cleaned.StartsWith("0") && cleaned.Length == 10)
         {
-            // Numéro français
             countryCode = "+33";
             number = cleaned.Substring(1);
         }

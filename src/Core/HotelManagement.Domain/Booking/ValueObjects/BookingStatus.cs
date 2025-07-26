@@ -6,6 +6,7 @@ public sealed class BookingStatus : ValueObject
 {
     public static readonly BookingStatus Pending = new("Pending");
     public static readonly BookingStatus Confirmed = new("Confirmed");
+    public static readonly BookingStatus PartiallyCheckedIn = new("PartiallyCheckedIn");
     public static readonly BookingStatus CheckedIn = new("CheckedIn");
     public static readonly BookingStatus CheckedOut = new("CheckedOut");
     public static readonly BookingStatus Cancelled = new("Cancelled");
@@ -22,10 +23,10 @@ public sealed class BookingStatus : ValueObject
         this == Pending || this == Confirmed;
 
     public bool CanCheckIn() => 
-        this == Confirmed;
+        this == Confirmed || this == PartiallyCheckedIn;
 
     public bool CanCheckOut() => 
-        this == CheckedIn;
+        this == CheckedIn || this == PartiallyCheckedIn;
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
